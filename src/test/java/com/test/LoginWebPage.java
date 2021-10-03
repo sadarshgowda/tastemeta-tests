@@ -26,6 +26,7 @@ public class LoginWebPage extends BaseTestCase {
     private String validPassword = ConfigReader.getProperty(Constants.VALID_PASSWORD);
     private String inValidUsername = ConfigReader.getProperty(Constants.INVALID_USERNAME);
     private String inValidPassword = ConfigReader.getProperty(Constants.INVALID_PASSWORD);
+    private String loginSuccessPageUrl = ConfigReader.getProperty(Constants.LOGIN_SUCCESS_PAGE_URL);
 
     @Test(priority = 0, description = "checking login functionality with valid username and password")
     public void loginWithValidCredentials() throws InterruptedException {
@@ -56,6 +57,50 @@ public class LoginWebPage extends BaseTestCase {
 
         WebElement submit = driver.findElement(By.cssSelector("button.btn.btn-f.sign-in"));
         submit.click();
+
+        TimeUnit.SECONDS.sleep(2);
+
+        Assert.assertEquals(loginSuccessPageUrl, driver.getCurrentUrl());
+
+        driver.quit();
+
+
+    }
+
+
+    @Test(priority = 1, description = "checking login functionality with invalid username and valid password")
+    public void loginWithInValidCredentials() throws InterruptedException {
+
+        System.setProperty("webdriver.chrome.driver", webDriver);
+
+        WebDriver driver = new ChromeDriver();
+
+        driver.manage().window().maximize();
+
+        driver.get(baseUrl);
+
+        //finding locator to click on login button
+        WebElement login = driver.findElement(By.cssSelector("p.login.cursor"));
+        login.click();
+
+        TimeUnit.SECONDS.sleep(1);
+
+        Assert.assertEquals(loginPageUrl,driver.getCurrentUrl());
+        driver.get(loginPageUrl);
+
+        //finding email web element to enter email
+        WebElement email = driver.findElement(By.xpath("//input[contains(@placeholder, 'Enter Email Address')]"));
+        email.sendKeys(inValidUsername);
+
+        WebElement password = driver.findElement(By.xpath("//input[contains(@placeholder, 'Enter Password')]"));
+        password.sendKeys(validPassword);
+
+        WebElement submit = driver.findElement(By.cssSelector("button.btn.btn-f.sign-in"));
+        submit.click();
+
+        TimeUnit.SECONDS.sleep(2);
+
+        Assert.assertNotEquals(loginSuccessPageUrl, driver.getCurrentUrl());
 
         driver.quit();
 
