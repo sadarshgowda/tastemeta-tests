@@ -3,6 +3,8 @@
     <test name="selenium">
         <classes>
             <class name="com.test.LoginWebPage"></class>
+            <class name="com.test.ChangePassword"></class>
+            <class name="com.test.CreateAccount"></class>
         </classes>
     </test>
 </suite>
